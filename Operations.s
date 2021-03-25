@@ -97,7 +97,7 @@ check_cancel:
 	return
 
 set_alarm:
-	;call LCD_Clear
+	call LCD_Clear
 	call	LCD_cursor_on
 	
 	call	LCD_Set_to_Line_2

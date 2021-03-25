@@ -23,16 +23,27 @@ Write_ALARM:				    ;write the words 'time:' before displaying the time
 	call	LCD_Write_Character	;write 'R'
 	movlw   'M'
 	call    LCD_Write_Character	;write 'M'
+
+	call	Write_space
+	call	Write_space
 	
-	call	Write_space
-	call	Write_space
-	call	Write_space
-	call	Write_space
-	call	Write_space
-	call	Write_space
-	call	Write_space
-	call	Write_space
-	call	Write_space
+	movlw	'A'
+	call	LCD_Write_Character	;write 'A'
+	movlw	'-'
+	call	LCD_Write_Character	;write '-'
+	movlw	'S'
+	call	LCD_Write_Character	;write 'S'
+	movlw	'n'
+	call	LCD_Write_Character	;write 'n'
+	movlw   'o'
+	call    LCD_Write_Character	;write 'o'
+	movlw   'o'
+	call    LCD_Write_Character	;write 'o'
+	movlw   'z'
+	call    LCD_Write_Character	;write 'z'
+	movlw   'e'
+	call    LCD_Write_Character	;write 'e'
+
 	return	
 	
  Write_Snooze:				    ;write the words 'time:' before displaying the time
@@ -146,35 +157,35 @@ Write_Settings:
 	
 	call	LCD_Set_to_Line_2
 	movlw	'A'
-	call	LCD_Write_Character	;write 'S'
+	call	LCD_Write_Character	;write 'A'
 	movlw	'-'
-	call	LCD_Write_Character	;write 'e'
+	call	LCD_Write_Character	;write '-'
 	movlw	'A'
-	call	LCD_Write_Character	;write 't'
+	call	LCD_Write_Character	;write 'A'
 	movlw	'l'
-	call	LCD_Write_Character	;write 't'
+	call	LCD_Write_Character	;write 'l'
 	movlw	'a'
-	call	LCD_Write_Character	;write 'i'
+	call	LCD_Write_Character	;write 'a'
 	movlw	'r'
-	call	LCD_Write_Character	;write 'n'
+	call	LCD_Write_Character	;write 'r'
 	movlw	'm'
-	call	LCD_Write_Character	;write 'g'
+	call	LCD_Write_Character	;write 'm'
 	
 	call	Write_space
 	call	Write_space
 	
 	movlw	'T'
-	call	LCD_Write_Character	;write 'S'
+	call	LCD_Write_Character	;write 'T'
 	movlw	'-'
-	call	LCD_Write_Character	;write 'e'
+	call	LCD_Write_Character	;write '-'
 	movlw	'T'
-	call	LCD_Write_Character	;write 't'
+	call	LCD_Write_Character	;write 'T'
 	movlw	'i'
-	call	LCD_Write_Character	;write 't'
-	movlw	'm'
 	call	LCD_Write_Character	;write 'i'
+	movlw	'm'
+	call	LCD_Write_Character	;write 'm'
 	movlw	'e'
-	call	LCD_Write_Character	;write 'n'
+	call	LCD_Write_Character	;write 'e'
 	
 	return
 	
