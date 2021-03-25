@@ -3,7 +3,7 @@
 extrn	clock_sec, clock_min, clock_hrs
 extrn	Write_ALARM, Write_Snooze
 extrn	Keypad, keypad_val
-extrn	LCD_delay_x4us, LCD_Set_to_Line_2
+extrn	LCD_delay_x4us, LCD_Set_to_Line_2, LCD_Clear
 extrn	hex_C, hex_A, skip_byte
     
 global	alarm_sec, alarm_min, alarm_hrs
@@ -141,6 +141,8 @@ Cancel_Alarm:
 	return
 	
 Snooze_Alarm:
+	call	LCD_Clear
+	
 	clrf	alarm_countdown, A
 	call	Write_Snooze
 	
