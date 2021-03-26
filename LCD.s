@@ -79,22 +79,22 @@ LCD_Set_Position:	;set position at which inputs will be displayed
 	call    LCD_delay_x4us
 	return
 	
-LCD_cursor_off:
+LCD_cursor_off:	    ;turn off LCD cursor and blinking
 	movlw	00001100B
 	call    LCD_Send_Byte_I	;set cursor off
 	return
 	
-LCD_cursor_on:
+LCD_cursor_on:	    ;turn on LCD cursor and blinking
 	movlw	00001111B
 	call    LCD_Send_Byte_I	;set cursor on
 	return
 	
-LCD_Set_to_Line_1:
+LCD_Set_to_Line_1:  ;set LCD cursor position to line 1
     movlw   10000000B
     call    LCD_Set_Position	;set cursor on
     return
     
-LCD_Set_to_Line_2:
+LCD_Set_to_Line_2:  ;set LCD cursor position to line 2
     movlw   11000000B
     call    LCD_Set_Position	;set cursor on
     return

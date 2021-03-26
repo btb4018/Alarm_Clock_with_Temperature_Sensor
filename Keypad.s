@@ -66,117 +66,117 @@ Check1:	movlw	11101110B	;move keypad value expected from 1 button into W
 	movwf	keypad_val, A	
 	return
 	
-Check2:	movlw	11101101B
+Check2:	movlw	11101101B	;check if 2 pressed 
 	CPFSEQ	keypad_input, A
 	bra	Check3
 	movlw	0x02	
 	movwf	keypad_val, A
 	return
 	
-Check3:	movlw	11101011B  
+Check3:	movlw	11101011B	;check if 3 pressed 
     	CPFSEQ	keypad_input, A
 	bra CheckF
 	movlw	0x03
 	movwf	keypad_val, A
 	return
  
-CheckF:	movlw	11100111B
+CheckF:	movlw	11100111B	;check if F pressed 
 	CPFSEQ	keypad_input, A
 	bra Check4
 	movlw	0x0F
 	movwf	keypad_val, A
 	return
 	
-Check4:	movlw	11011110B   
+Check4:	movlw	11011110B	;check if 4 pressed 
     	CPFSEQ	keypad_input, A
 	bra Check5
 	movlw	0x04	
 	movwf	keypad_val, A
 	return
  
-Check5:	movlw	11011101B
+Check5:	movlw	11011101B	;check if 5 pressed 
 	CPFSEQ	keypad_input, A
 	bra Check6
 	movlw	0x05	
 	movwf	keypad_val, A
 	return
 	
-Check6:	movlw	11011011B  
+Check6:	movlw	11011011B	;check if 6 pressed 
     	CPFSEQ	keypad_input, A
 	bra CheckE
 	movlw	0x06	
 	movwf	keypad_val, A
 	return
  
-CheckE:	movlw	11010111B
+CheckE:	movlw	11010111B	;check if E pressed 
 	CPFSEQ	keypad_input, A
 	bra Check7
 	movlw	0x0E	
 	movwf	keypad_val, A
 	return
 	
-Check7:	movlw	10111110B 
+Check7:	movlw	10111110B	;check if 7 pressed 
 	CPFSEQ	keypad_input, A
 	bra Check8	
 	movlw	0x07	
 	movwf	keypad_val, A
 	return
  
-Check8:	movlw	10111101B
+Check8:	movlw	10111101B	;check if 8 pressed 
 	CPFSEQ	keypad_input, A
 	bra Check9
 	movlw	0x08	
 	movwf	keypad_val, A
 	return
 	
-Check9:	movlw	10111011B   
+Check9:	movlw	10111011B	;check if 9 pressed 
     	CPFSEQ	keypad_input, A
 	bra CheckD
 	movlw	0x09   
 	movwf	keypad_val, A
 	return
 	
-CheckD:	movlw	10110111B  
+CheckD:	movlw	10110111B	;check if D pressed 
     	CPFSEQ	keypad_input, A
 	bra CheckA
 	movlw	0x0D	
 	movwf	keypad_val, A
 	return
  
-CheckA:	movlw	01111110B
+CheckA:	movlw	01111110B	;check if A pressed 
 	CPFSEQ	keypad_input, A
 	bra Check0
 	movlw	0x0A	
 	movwf	keypad_val, A
 	return
-	
-Check0:	movlw	01111101B  
+	    
+Check0:	movlw	01111101B	;check if 0 pressed 
 	CPFSEQ	keypad_input, A
 	bra CheckB
 	movlw	0x00	
 	movwf	keypad_val, A
 	return
  
-CheckB: movlw	01111011B
+CheckB: movlw	01111011B	;check if B pressed 
 	CPFSEQ	keypad_input, A
 	bra CheckC
 	movlw	0x0B	
 	movwf	keypad_val, A
 	return
 	
-CheckC:	movlw	01110111B   
+CheckC:	movlw	01110111B	;check if C pressed 
     	CPFSEQ	keypad_input, A
 	bra Null
 	movlw	0x0C	
 	movwf	keypad_val, A
 	return
 	
-Null:	movlw	0xff
+Null:	movlw	0xff		;check if null pressed 
 	movwf	keypad_val, A
 	return
 	
 	
-delay_keypad:	
+delay_keypad:	;delay of 40 us
 	movlw	0x10
 	call	LCD_delay_x4us
 	return

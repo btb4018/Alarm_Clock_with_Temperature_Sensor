@@ -28,15 +28,8 @@ intermediate2_16x16:	ds 1	;16x16, intermediate used while multiplying
 psect	temp_code, class=CODE
 	;convert and display binary voltage as decimal on LCD;
 Temp:
-	;call	LCD_Clear
-	;movlw	11000000B
-	;call	LCD_Set_Position	; sets position on LCD
 	call	ADC_Read	; reads voltage value and stores in ADRESH:ADRESL
 	
-	;movf	ADRESH, W
-	;call LCD_Write_Hex
-	;movf	ADRESL, W
-	;call LCD_Write_Hex
 	call	Conversion	;converst from hex to decimal
 	
 	movlw	10110010B
@@ -45,8 +38,7 @@ Temp:
 	call	LCD_Write_Character
 	
 	return
-	;goto	measure_loop		; repeat loop so that voltage is displayed continuously as knob is turned
-	
+
 	;convert hex to decimal;
 Conversion:
 	movlw	0x8A	;preparing inputs for multiplication

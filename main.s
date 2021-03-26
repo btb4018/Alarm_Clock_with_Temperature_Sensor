@@ -31,15 +31,14 @@ start:
 	clrf	operation_check, A
 	
 settings_clock:
-	call	Keypad
+	call	Keypad	    ;check Keypad
 	
-	movlw	0x0f
+	movlw	0x0f	    ;check if keypad = F
 	CPFSEQ	keypad_val, A
 	bra	settings_clock
 	
-	call	operation
-
+	call	operation   ;
 	
-	goto	settings_clock	; Sit in infinite loop
+	goto	settings_clock	;branch back to settings_clock
     
 	end	main

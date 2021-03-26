@@ -10,7 +10,7 @@ global	delay
 psect	Write_and_Display_code, class=CODE 
 
 
-Write_ALARM:				    ;write the words 'time:' before displaying the time
+Write_ALARM:		;Write 'Alarm  A-Snooze' to 2nd line of LCD
 	;call delay
 	call	LCD_Set_to_Line_2
 	movlw	'A'
@@ -46,8 +46,8 @@ Write_ALARM:				    ;write the words 'time:' before displaying the time
 
 	return	
 	
- Write_Snooze:				    ;write the words 'time:' before displaying the time
-	call LCD_Set_to_Line_2
+ Write_Snooze:		;Write 'Snooze' to 2nd line of LCD
+	call	LCD_Set_to_Line_2
 	movlw	'S'
 	call	LCD_Write_Character	;write 'S'
 	movlw	'n'
@@ -67,25 +67,11 @@ Write_ALARM:				    ;write the words 'time:' before displaying the time
 	call	Write_space
 	call	Write_space
 	
-	call delay	
+	call	delay	
+	call	delay
 	return	   
-
-Write_error:
 	
-	movlw	'E'
-	call	LCD_Write_Character	;write 'E'
-	movlw	'r'
-	call	LCD_Write_Character	;write 'r'
-	movlw	'r'
-	call	LCD_Write_Character	;write 'r'
-	movlw	'o'
-	call	LCD_Write_Character	;write 'o'
-	movlw	'r'
-	call	LCD_Write_Character	;write 'r'  
-	
-	return
-	
-Write_Error:
+Write_Error:	     ;Write 'Error' to LCD
 	
 	movlw	'E'
 	call	LCD_Write_Character	;write 'E'
@@ -100,7 +86,7 @@ Write_Error:
 	call delay
 	return
 	
-Write_Time:
+Write_Time:	     ;Write 'Time:' to LCD
 	
 	movlw	'T'
 	call	LCD_Write_Character	;write 'T'
@@ -115,7 +101,7 @@ Write_Time:
 	
 	return
 	
-Write_Set_Time:
+Write_Set_Time:	     ;Write 'Set Time' to LCD
 	movlw	'S'
 	call	LCD_Write_Character	;write 'S'
 	movlw	'e'
@@ -136,7 +122,7 @@ Write_Set_Time:
 	
 	return
 	
-Write_Settings:
+Write_Settings:		;Write 'Settings' to 1st line and 'A-Alarm  T-Time' to 2nd line of LCD
 	call	LCD_Set_to_Line_1
 	movlw	'S'
 	call	LCD_Write_Character	;write 'S'
@@ -189,7 +175,7 @@ Write_Settings:
 	
 	return
 	
-Write_Temp:
+Write_Temp:	    ; ;Write 'Temp:' to LCD
 	movlw	'T'
 	call	LCD_Write_Character	;write 'T'
 	movlw	'e'
@@ -203,7 +189,7 @@ Write_Temp:
 	
 	return
 	
-Write_Alarm:
+Write_Alarm:	     ;Write 'Alarm' to LCD
 	movlw	'A'
 	call	LCD_Write_Character	;write 'A'
 	movlw	'l'
@@ -219,7 +205,7 @@ Write_Alarm:
 	
 	return
 	
-Write_zeros:
+Write_zeros:	     ;Write '00:00:00' to LCD
 	movlw	0x0
 	call	LCD_Write_Low_Nibble
 	movlw	0x0
@@ -236,8 +222,7 @@ Write_zeros:
 	call	LCD_Write_Low_Nibble
 	return
 	
-Write_no_alarm:
-	call delay
+Write_no_alarm:	    ;Write 'No Alarm' to LCD
 	movlw   'N'
 	call    LCD_Write_Character	;write 'N'
 	movlw   'o'
@@ -256,7 +241,7 @@ Write_no_alarm:
 	call	Write_space
 	return	
 
-Write_New:
+Write_New:	    ;Write 'New: ' to LCD
 	movlw	'N'		    ;character 'N'
 	call	LCD_Write_Character
 	movlw	'e'		    ;character 'e'
@@ -267,18 +252,18 @@ Write_New:
 	call	Write_space
 	return
 
-Write_colon:
+Write_colon:	    ; Write ':' to LCD
 	movlw	':'		    ;character ':'
 	call	LCD_Write_Character
 	return
 	
-Write_space:
+Write_space:	    ; Write ' ' space to LCD
 	movlw   ' '
 	call    LCD_Write_Character	;write ' '
 	return
 
 	
-delay:	
+delay:		    ;400ms delay
 	movlw	0x64
 	call	LCD_delay_ms
 	movlw	0x64

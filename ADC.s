@@ -6,8 +6,8 @@ psect	adc_code, class=CODE
     
 ADC_Setup:
 	bsf	TRISA, PORTA_RA3_POSN, A  ; pin RA3==AN3 input
-	bsf	ANSEL3	    ; set AN0 to analog
-	movlw   0x0D	    ; select AN0 for measurement
+	bsf	ANSEL3	    ; set AN3 to analog
+	movlw   0x0D	    ; select AN3 for measurement
 	movwf   ADCON0, A   ; and turn ADC on
 	movlw   0x30	    ; Select 4.096V positive reference
 	movwf   ADCON1,	A   ; 0V for -ve reference and -ve input

@@ -31,14 +31,14 @@ Clock_Setup:
 	movwf   clock_min, A
 	movwf   clock_hrs, A
 	
-	call	Rewrite_Clock
+	call	Rewrite_Clock	;write starting time to LCD
 	
 	movlw	0x3C		;setting hex values for decimal 24 and 60 for comparison
 	movwf	check_60, A
 	movlw	0x18
 	movwf	check_24, A
 	
-	movlw	0x0B
+	movlw	0x0B		;Set timer 0 start values
 	movwf	timer_start_value_1, A
 	movlw	0xDB
 	movwf	timer_start_value_2, A
