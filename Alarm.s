@@ -23,13 +23,12 @@ buzz_on_or_off: ds	1   ;reserve byte to indicate if to buzz or not
 
 buzzer_counter_1: ds 1	;reserve byte to count down number of remaining loops of buzz_loop_1
 buzzer_counter_2: ds 1	;reserve byte to count down number of remaining loops of buzz_loop_2
-
 alarm_countdown: ds 1    ;reserve byte to countdown when alarm going off
     
 psect	Alarm_code, class=CODE
     
-Alarm_Setup:	;clear alarm time
-	clrf	alarm_sec, A
+Alarm_Setup:	
+	clrf	alarm_sec, A	;clear alarm time
 	clrf	alarm_min, A
 	clrf	alarm_hrs, A
 	
@@ -42,12 +41,12 @@ Alarm_Setup:	;clear alarm time
 Check_Alarm:	
 	movlw	0x00	;move 0 to W
 	cpfseq	alarm_countdown, A	;check if alarm_countdown = W 
-	bra	Decrement_Alarm_Countdown   ;if not equal branch to Decrement_Alarm_Countdown 
+	bra	Decrement_Countdown   ;if not equal branch to Decrement_Alarm_Countdown 
 	bra	Compare_Alarm	;if equal branch to Compare_Alarm
 
-Decrement_Alarm_Countdown:
+Decrement_Countdown:
 	decf	alarm_countdown, A  ;decrease alarm_countdown by one
-	call	ALARM	
+	call	ALARM	;call subroutine that controls buzzing
 	return
 	
 Compare_Alarm:  
@@ -56,25 +55,25 @@ Compare_Alarm:
 	movf	alarm_hrs, W, A	;move alarm_hrs to W
 	CPFSEQ	clock_hrs, A	;check if W = clock_hrs
 	return
-	movf	alarm_min, W, A
-	CPFSEQ	clock_min, A
+	movf	alarm_min, W, A	;move alarm_min to W
+	CPFSEQ	clock_min, A	;check if W = clock_min
 	return
-	movf	alarm_sec, W, A
-	CPFSEQ	clock_sec, A
+	movf	alarm_sec, W, A	;move alarm_sec to W
+	CPFSEQ	clock_sec, A	;check if W = clock_sec
 	return
 	
 	movlw	0x3C	;if alarm time = clock time, move 0x3C = dec 60 to W
 	movwf	alarm_countdown, A  ;set alarm_countdown to 0x3C
 	
-	call ALARM
+	call ALARM	;call subroutine to trigger buzzer and LCD
 	return
 ALARM:
 	call	Write_ALARM ;Write 'ALARM'
 
 	BTG	buzz_on_or_off,0 ;toggle buzz_on_or_off bit
-	call	Buzzer
+	call	Buzzer	    ;call subroutine to cause buzzing for 1 sec
 	
-	call	LCD_Clear
+	call	LCD_Clear   ;clear LCD display
 
 	return	
 	  
@@ -166,5 +165,6 @@ Snooze_Alarm:	;stop alarm going off and set new alarm for five mins after origin
 	call	LCD_Clear
 	
 	return
+	
 
 
