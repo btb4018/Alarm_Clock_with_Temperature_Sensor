@@ -2,7 +2,7 @@
 #include <xc.inc>
 
 extrn	Clock_Setup, Clock
-extrn	operation, Operation_Setup
+extrn	Operation, Operation_Setup
 extrn	LCD_Setup, LCD_Clear
 extrn	Keypad, keypad_val
 extrn	Alarm_Setup
@@ -18,11 +18,13 @@ main:	org	0x0	; reset vector
 	goto	start
 	;org	0x100
 
-int_hi:	org	0x0008	; high vector, no low vector
+int_hi:	org	0x0008	;set timer0 interrupt as high priority
 	goto	Clock
 	
 start:
-	call	LCD_Setup
+    
+setup:	;call setup subroutines for different peripherals
+	call	LCD_Setup   
 	call	Clock_Setup
 	call	Operation_Setup
 	call	Alarm_Setup
@@ -30,15 +32,16 @@ start:
 	
 	clrf	operation_check, A
 	
-settings_clock:
+Settings_Clock:
 	call	Keypad	    ;check Keypad
 	
 	movlw	0x0f	    ;check if keypad = F
 	CPFSEQ	keypad_val, A
-	bra	settings_clock
+	bra	Settings_Clock	;if not branch back to Settings_Clock
 	
-	call	operation   ;
+	call	Operation   ;is =F branch to Operation
 	
-	goto	settings_clock	;branch back to settings_clock
+	goto	Settings_Clock	;branch back to settings_clock
     
 	end	main
+	
