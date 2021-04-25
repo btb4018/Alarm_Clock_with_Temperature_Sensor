@@ -16,7 +16,7 @@ extrn	Write_Set_Time, Write_Settings
 extrn	Write_colon, Write_space, LCD_cursor_on, LCD_cursor_off, LCD_Set_to_Line_1, LCD_Set_to_Line_2
 
 global	temporary_hrs, temporary_min, temporary_sec
-global	Clock, Clock_Setup, operation, Operation_Setup, skip_byte, check_60, check_24
+global	Clock, Clock_Setup, Operation, Operation_Setup, skip_byte, hex_60, hex_24
 global	hex_A, hex_C
     
     
@@ -45,12 +45,12 @@ hex_E:	ds 1
 hex_F:	ds 1
 hex_null:   	ds  1
    
-alarm: ds 1	;reserving byte to indicate whether alarm or time being set
+alarm_settings: ds 1	;reserving byte to indicate whether alarm or time being set
     
 psect	Operations_code, class=CODE
 
 Operation_Setup:
-	bcf	alarm, 0, A
+	bcf	alarm_settings, 0, A
 	bcf	skip_byte,  0, A	    ;set skip byte to zero to be used to skip lines later
 	
 	movlw	0x0A		;storing keypad character hex values
@@ -69,7 +69,7 @@ Operation_Setup:
 	movwf	hex_null, A
 	return
 
-operation:
+Operation:
 	bsf	operation_check, 0, A	;set operation_check bit to signal start of operatio 
 	call	LCD_Clear   
 	call	Write_Settings		;Write 'Settings' to LCD
@@ -82,7 +82,7 @@ check_keypad:
 check_alarm:	
 	CPFSEQ	hex_A, A		;compare with A
 	bra	check_set_time		;if not A check B for set time 
-	bra	set_alarm		;if A branch to set alarm
+	bra	Set_Alarm		;if A branch to set alarm
 check_set_time:
 	CPFSEQ	hex_B, A		;compare with B
 	bra	check_cancel		;if not B check C for cancel
@@ -93,7 +93,7 @@ check_cancel:
 	bra	Cancel			;if C branch to canncel
 	return
 
-set_alarm:	;Display Set Alarm screen
+Set_Alarm:	;Display Set Alarm screen
 	call	LCD_Clear	    ;clear LCD
 	call	LCD_cursor_on	    ;turn blinking and cursor on
 
@@ -102,7 +102,7 @@ set_alarm:	;Display Set Alarm screen
 	call	LCD_Set_to_Line_2   ;set cursor to line 2
 	call	Write_New	    ;write 'New: ' to LCD
 	
-	bsf	alarm, 0, A	    ;set alarm bit to 1 to shown alarm setting selected
+	bsf	alarm_settings, 0, A	    ;set alarm bit to 1 to shown alarm setting selected
 	
 	bra	Set_Time_Clear	    
 	
@@ -119,7 +119,7 @@ Set_Time:	;Display Set Time screen
 	call	LCD_Set_to_Line_2   ;set LCD cursor to line 2
 	call	Write_Time	    ;write 'Time: ' to LCD
 	
-	bcf	alarm, 0, A	    ;clear alarm bit to shown time setting selected
+	bcf	alarm_settings, 0, A	    ;clear alarm bit to shown time setting selected
 	
 Set_Time_Clear:	;clear bytes into which times inputted
 	clrf	set_time_hrs1, A
@@ -259,24 +259,24 @@ Enter_Time:	;check time valid and if so store, also reset LCD
 	call	LCD_cursor_off	;turn off LCD blinking and cursor
 	
 	bcf	operation_check, 0, A	;clear operation_check bit to signal end of operation
-	bcf	alarm, 0, A
+	bcf	alarm_settings, 0, A	;clear alarm_settings bit for next operation
 	
 	call	LCD_Clear   ;clear LCD display
 	
 	return
 	
 Cancel:		;cancel operation and reset LCD
-	call	LCD_cursor_off
+	call	LCD_cursor_off	;turn off LCD blinking and cursor
 	
-	bcf	operation_check, 0, A
-	bcf	alarm, 0, A
+	bcf	operation_check, 0, A	;clear operation_check bit to signal end of operation
+	bcf	alarm_settings, 0, A	;clear alarm_settings bit for next operation
 	
 	call	LCD_Clear
 	
 	return
 	
 Delete:		;cancel operation and reset LCD
-	btfss	alarm, 0, A ;test alarm bit and skip if set and alarm setting chosen
+	btfss	alarm_settings, 0, A ;test alarm bit and skip if set and alarm setting chosen
 	bra	Cancel	
 	bcf	alarm_on, 0, A	;clear alarm_on bit to turn off alarm
 	bra	Cancel
@@ -354,7 +354,7 @@ Input_Sort:
 	mullw	0x0A		    ;multiply W by 10
 	movf	PRODL, W, A	    ;move lower product to W
 	addwf	set_time_hrs2, 0, 0 ;add set_time_hrs2 to W
-	CPFSGT	check_24, A	    ;c heck W less than 24
+	CPFSGT	hex_24, A	    ;c heck W less than 24
 	bra	Output_Error	    ;if not branch to ouput error
 	movwf	temporary_hrs, A    ;if valid move to temporary_hrs
 	
@@ -362,7 +362,7 @@ Input_Sort:
 	mullw	0x0A
 	movf	PRODL, W, A
 	addwf	set_time_min2, 0, 0
-	CPFSGT	check_60, A
+	CPFSGT	hex_60, A
 	bra	Output_Error
 	movwf	temporary_min, A
 	
@@ -370,11 +370,11 @@ Input_Sort:
 	mullw	0x0A
 	movf	PRODL, W, A
 	addwf	set_time_sec2, 0, 0
-	CPFSGT	check_60, A
+	CPFSGT	hex_60, A
 	bra	Output_Error
 	movwf	temporary_sec, A
 	
-	btfss	alarm, 0, A	    ;if alarm setting selected skip
+	btfss	alarm_settings, 0, A	    ;if alarm setting selected skip
 	bra	Input_into_Clock    ;branch to Input_into_Clock
 	bra	Input_into_Alarm    ;branch to Input_into_Alarm
 	
@@ -400,6 +400,7 @@ Output_Error:
 	call	LCD_Set_to_Line_1   ;set position in LCD to first line
 	call	Write_Error	    ;write 'Error' to LCD
 	bra	Cancel		    ;branch to cancel 
+	
     
 	
 
