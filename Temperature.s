@@ -32,54 +32,50 @@ Temp:
 	
 	call	Conversion	;converst from hex to decimal
 	
-	movlw	10110010B
+	movlw	10110010B	;write degrees symbol to LCD
 	call	LCD_Write_Character
-	movlw	0x43
+	movlw	0x43		;write 'C' to LCD
 	call	LCD_Write_Character
 	
 	return
 
 	;convert hex to decimal;
 Conversion:
-	movlw	0x8A	;preparing inputs for multiplication
+	movlw	0x8A	;move least significant byte of conversion factor to in_K_l
 	movwf	in_K_l, A
-	movlw	0x41	;most sig byte of first number
+	movlw	0x41	;move least significant byte of conversion factor to in_K_h
 	movwf	in_K_h, A
-	movff	ADRESH, in_AD_h
-	movff	ADRESL, in_AD_l
+	movff	ADRESH, in_AD_h	;move most siginicant byte of ADC output to in_AD_h
+	movff	ADRESL, in_AD_l	;move least siginicant byte of ADC output to in_AD_l
 	
-	call  Multiply16x16_ADRES   ;first step of conversion
-	;movf	ssouthh, W
-	;call	LCD_Write_Low_Nibble	;display low nibble of most sig byte of answer
+	call  Multiply16x16_ADRES   ;1st step: multiply ADC output by conversion factor
 	
-	
-	
-	movlw	0x0A	;preparing inputs for multiplication
+	movlw	0x0A	;move dec10 to in_24x8_8
 	movwf	in_24x8_8, A
 	
-	movff	out_16x16_lu, in_24x8_24h	;preparing inputs for multiplication
+	movff	out_16x16_lu, in_24x8_24h	;move 1st multiplication remainders into 2nd multiplication inputs
 	movff	out_16x16_ul, in_24x8_24m
 	movff	out_16x16_l, in_24x8_24l
-	call	Multiply24x8	;second multiplication for conversion
+	call	Multiply24x8	;2nd step: multiply 1st multiplication remainder by 0x0A
 	movf	out_24x8_u, W, A
 	call	LCD_Write_Low_Nibble	;display low nibble of most sig byte of answer
 	
 	
 	
-	movff	out_24x8_lu, in_24x8_24h	;preparing inputs for multiplication
+	movff	out_24x8_lu, in_24x8_24h	;move 2nd multiplication remainders into 3rd multiplication inputsn
 	movff	out_24x8_ul, in_24x8_24m
 	movff	out_24x8_l, in_24x8_24l
-	call	Multiply24x8  ;third multiplication for conversion
+	call	Multiply24x8  ;3rd step: multiply 2nd multiplication remainder by 0x0A
 	movf	out_24x8_u, W, A
 	call	LCD_Write_Low_Nibble	;display low nibble of most sig byte of answer
 	
 	movlw	0x2E
 	call	LCD_Write_Character ;writing decimal point
 	
-	movff	out_24x8_lu, in_24x8_24h	;preparing inputs for multiplication
+	movff	out_24x8_lu, in_24x8_24h	;move 3rd multiplication remainders into 4th multiplication inputs
 	movff	out_24x8_ul, in_24x8_24m
 	movff	out_24x8_l, in_24x8_24l
-	call	Multiply24x8  ;fourth multiplication for conversion
+	call	Multiply24x8  ;4th step: multiply 3rd multiplication remainder by 0x0A
 	movf	out_24x8_u, W, A
 	call	LCD_Write_Low_Nibble	;display low nibble of most sig byte of answer
 	
